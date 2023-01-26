@@ -21,7 +21,10 @@ from termcolor import colored, cprint
 JS_EVENTS = ["onerror", "onchange", "onsearch", "onsubmit", "onkeypress", "onkeyup", "onkeydown",
           "onclick", "onmouseover", "onwheel", "onmousedown", "onmouseup", "ondrop", "onended",
           "onplay", "onpause", "ontoggle"]
+MIME_TYPE_RE = re.compile('^\w+/\w+$')
 SELENIUM_HEADERS = []
+SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
+LINKFINDER_PATH = os.path.join(SCRIPT_DIR, "LinkFinder/linkfinder.py")
 
 
 class ArachneSpider(Spider):
@@ -163,8 +166,9 @@ class ArachneSpider(Spider):
         # extract cookies and their paths from HTTP response header
         cookie_paths = extract_cookies(response.headers.getlist("Set-Cookie"), response.url)
         cookie_urls = set()
-        for path in cookie_paths:
-            cookie_urls.add(self.to_absolute_url(path, response.urljoin))
+        # TODO:
+        # for path in cookie_paths:
+        #     cookie_urls.add(self.to_absolute_url(path, response.urljoin))
 
 
         # use scrapy's lxml linkextractor to extract links / URLs
@@ -316,6 +320,7 @@ class ArachneSpider(Spider):
                           meta={'dont_redirect': True, 'handle_httpstatus_list': [301, 302, 401, 403, 404, 405]})
             yield req
 
+
     def on_error(self, failure):
         """Overrides the default method to catch and process e.g. status 500 responses"""
 
@@ -462,7 +467,6 @@ class ArachneSpider(Spider):
 
             # run the JavaScript of every eventful HTML element
             if elements:
-                print(elements)
                 for element in elements:
                     # try submit and click events directly and other attributes via a workaround
                     try:
@@ -586,7 +590,8 @@ class ArachneSpider(Spider):
         # Run Linkfinder as subprocess and remove the input file thereafter
         linkfinder_out = ''
         try:
-            linkfinder_out = subprocess.check_output(['python3 LinkFinder/linkfinder.py -i ' +
+
+            linkfinder_out = subprocess.check_output(['python3 %s -i ' % LINKFINDER_PATH +
                                                       tmp_filename_in + ' -o cli 2>/dev/null'], shell=True)
             linkfinder_out = linkfinder_out.decode()
         except subprocess.CalledProcessError:
@@ -598,6 +603,9 @@ class ArachneSpider(Spider):
             if not line:
                 continue
             line = line.strip()
+            if MIME_TYPE_RE.match(line):
+                continue
+
             line = self.to_absolute_url(line, urljoin_fnct)
             # if configured, check if the discovered URL is valid and exists
             if self.config['check_linkfinder']:
