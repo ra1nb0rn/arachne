@@ -1,0 +1,20 @@
+{
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.114 Safari/537.36",
+    "do_reverse_dns": true,
+    "headers": [],
+    "exclude_paths": [
+        "^.*[Ll][Oo][Gg][Oo][Uu][Tt].*$"
+    ],
+    "restrict_paths": [],
+    "proxy": "",
+    "extract_info_from_forms": true,
+    "extract_comments": false,
+    "use_selenium": false,
+    "use_linkfinder": true,
+    "check_linkfinder": true,
+    "linkfinder_check_timeout": 2,
+    "max_depth": 4,
+    "max_path_visits": 250,
+    "max_retries": 3,
+    "crawl_parameter_links": true
+}

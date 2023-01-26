@@ -1,0 +1,5 @@
+scrapy
+selenium
+selenium-wire
+comment_parser
+termcolor
