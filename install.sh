@@ -8,7 +8,7 @@ install_chromedriver_linux() {
     POSSIBLE_PKGS="chromium-driver chromium-chromedriver"
     SUCCESS=0
 
-    ${LINUX_PACKAGE_MANAGER} update
+    sudo ${LINUX_PACKAGE_MANAGER} update
     for pkg in $POSSIBLE_PKGS; do
         sudo ${LINUX_PACKAGE_MANAGER} install -y $pkg
         if [ $? -eq 0 ]; then
@@ -57,6 +57,9 @@ elif [ "${KERNEL}" == "Linux" ]; then
 
     # edit the first line to have linkfinder run with Python 3 by default
     sed -i "1s/python$/python3/" LinkFinder/linkfinder.py
+
+    # create symlink
+    sudo ln -sf $(pwd)/arachne.py /usr/local/bin/arachne
 else
     printf "Could not identify running OS.\\nPlease install chromedriver manually."
     exit 1

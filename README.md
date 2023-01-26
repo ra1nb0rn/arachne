@@ -5,7 +5,11 @@
 ## Installation
 * For a simple installation, just run the ``install.sh`` script.
 * If you want to install *Arachne* manually, make sure to have all Python packages installed as well as Selenium and LinkFinder if you want to use them.
-* To build a Docker container, you can use the provided Dockerfile: ``docker container run -it -v "$(pwd):/home/arachne" --shm-size="1g" arachne:latest``
+* To build a Docker container, you can use the provided Dockerfile:
+  ```
+  docker build -t arachne .
+  docker container run -it --shm-size="1g" arachne
+  ```
 
 ## Usage
 * To simply crawl a website, you can run the following command:
