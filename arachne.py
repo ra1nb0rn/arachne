@@ -91,6 +91,8 @@ def main():
         for cookies_iter in args.cookie:
             cookies += cookies_iter
         config['headers'].append('Cookie: ' + '; '.join(cookies))
+    if args.proxy:
+        config['proxy'] = args.proxy
     
     # set up scrapy / crawler and run it
     logging.getLogger("scrapy").propagate = False
